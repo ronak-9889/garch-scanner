@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GoArch GARCH Scanner — Data Provider Setup</title>
+<style>
+:root{--bg:#131722;--panel:#1c2030;--line:#2a2e39;--ink:#d1d4dc;--muted:#9296a3;--accent:#2962ff;--up:#26a69a;--gold:#f0c36a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,"Segoe UI",Roboto,sans-serif}.wrap{max-width:760px;margin:0 auto;padding:34px 20px 60px}h1{margin:0;font-size:27px;line-height:1.2}h1 em{font-style:normal;color:var(--up)}h2{font-size:17px;margin:0 0 8px}.sub,.hint{color:var(--muted)}.sub{font-size:14px;margin:8px 0 18px}.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px;margin-top:16px}.disc{background:#241f14;border:1px solid #3a3220;color:var(--gold);padding:12px 14px;border-radius:8px;font-size:12.5px;margin:18px 0}.agree{white-space:pre-wrap;max-height:38vh;overflow:auto;background:#20242f;padding:14px;border-radius:8px;font-size:13px}.chk{display:flex;gap:9px;align-items:flex-start;font-size:13px;margin:14px 0}.btn{border:0;border-radius:8px;background:var(--accent);color:#fff;padding:10px 16px;font:700 14px inherit;cursor:pointer;text-decoration:none;display:inline-block}.btn:disabled{opacity:.45;cursor:not-allowed}.ghost{background:#252b3a;border:1px solid var(--line)}.hidden{display:none}.bar{height:8px;background:#292e3b;border-radius:5px;overflow:hidden;margin:15px 0 8px}.bar i{display:block;height:100%;background:var(--up);width:0}.err{color:#ff9a8a;white-space:pre-wrap}.step{font-weight:650}.foot{font-size:12px;color:var(--muted);margin-top:22px}
+</style></head>
+<body><main class="wrap">
+<h1>GoArch <em>GARCH Scanner</em></h1>
+<p class="sub">Scans eligible NSE/BSE equities across the discovered exchange universe and provides a separate global-index monitor. Choose Yahoo Finance by default, or configure Dhan for Nifty 50 benchmark candles.</p>
+<div class="disc">Educational research only; not investment advice. Statistical ranges are estimates, not guaranteed highs/lows. This software never places orders.</div>
+<section id="agreeCard" class="card hidden"><h2>Before you start</h2><p class="hint">Please read and accept the existing software agreement before running the analysis.</p><pre id="agreement" class="agree"></pre><label class="chk"><input id="accept" type="checkbox"> I have read and understood the agreement and accept it in full.</label><button id="agreeBtn" class="btn" disabled>I agree and fetch data</button></section>
+<section id="homeCard" class="card hidden"><h2>Data provider settings</h2>
+<label for="provider"><strong>Provider for Nifty 50 GARCH benchmark</strong></label><select id="provider" style="display:block;width:100%;margin:8px 0 12px;padding:10px;background:#20242f;color:var(--ink);border:1px solid var(--line);border-radius:7px"><option value="yahoo">Yahoo Finance (default; no API credentials)</option><option value="dhan">Dhan API (requires Dhan Data API access)</option></select>
+<div id="dhanFields" class="hidden"><label for="clientId">Dhan Client ID</label><input id="clientId" autocomplete="off" style="display:block;width:100%;margin:6px 0 12px;padding:10px;background:#20242f;color:var(--ink);border:1px solid var(--line);border-radius:7px"><label for="token">Dhan Access Token</label><input id="token" type="password" autocomplete="new-password" style="display:block;width:100%;margin:6px 0 12px;padding:10px;background:#20242f;color:var(--ink);border:1px solid var(--line);border-radius:7px"><p class="hint">Credentials are saved in this computer's local GoArch configuration and sent to Dhan only. Dhan mode in this release applies to the Nifty 50 benchmark candles; the full NSE/BSE equity scanner and global indices still use Yahoo Finance. This app does not place orders.</p></div>
+<p class="hint">The full-market scanner uses the discovered NSE/BSE equity universe, not only Nifty 50. The first full-market refresh can take a long time because thousands of symbols may be requested individually. Yahoo Finance is unofficial and may rate-limit requests; unsupported tickers are skipped.</p><p id="providerError" class="err"></p><button id="saveProvider" class="btn">Save provider settings</button> <button id="refresh" class="btn">Save and run refresh</button> <a href="/" class="btn ghost">Open chart</a></section>
+<section id="progress" class="card hidden"><h2 id="heading">Refreshing data</h2><p class="hint">Downloading market candles, fitting the GARCH model and updating the stock scanner.</p><div class="bar"><i id="bar"></i></div><div id="step" class="step">Starting…</div><p id="error" class="err"></p><div id="actions" class="hidden"><button id="retry" class="btn">Try again</button> <a href="/" class="btn ghost">Open chart / saved data</a></div></section>
+<p class="foot">Data sources: Yahoo Finance for the full-market NSE/BSE scanner and global indices; optional Dhan API for Nifty 50 benchmark candles. It is unofficial and may be delayed, rate-limited, incomplete, or unavailable. Intraday 5-minute history is generally limited to roughly the most recent 60 days; this app does not receive a guaranteed real-time exchange feed. Your results may differ from broker data.</p>
+</main><script>
+const $=id=>document.getElementById(id);const post=(url)=>fetch(url,{method:"POST"});let timer;
+function providerFields(){ $('dhanFields').classList.toggle('hidden',$('provider').value!=='dhan') }
+$('provider').onchange=providerFields;
+async function saveProvider(){ $('providerError').textContent=''; const payload={provider:$('provider').value,client_id:$('clientId').value.trim(),token:$('token').value.trim()}; try {const r=await fetch('/api/provider',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});const d=await r.json();if(!r.ok)throw new Error(d.error||'Could not save provider settings');return true}catch(e){$('providerError').textContent=e.message;return false}}
+async function tick(){let st;try{st=await(await fetch('/api/state')).json()}catch(e){timer=setTimeout(tick,1500);return}
+ if(!st.agreed){$('agreeCard').classList.remove('hidden');$('homeCard').classList.add('hidden');$('progress').classList.add('hidden');$('agreement').textContent=st.agreement;return}
+ $('agreeCard').classList.add('hidden');
+ $('provider').value=st.provider||'yahoo';providerFields();
+ if(new URLSearchParams(location.search).has('edit')){$('homeCard').classList.remove('hidden')}else{$('homeCard').classList.add('hidden')}
+ if(st.refreshing){$('progress').classList.remove('hidden');$('heading').textContent='Refreshing from Yahoo Finance';$('bar').style.width=Math.round((st.progress||0)*100)+'%';$('step').textContent=st.step||'Working…';$('error').textContent='';$('actions').classList.add('hidden')}
+ else if(st.status==='error'||(st.status==='done'&&st.error)){$('progress').classList.remove('hidden');$('heading').textContent='Refresh needs attention';$('step').textContent=st.step||'Stopped';$('error').textContent=st.error||'';$('actions').classList.remove('hidden')}
+ else if(st.status==='done'){$('progress').classList.add('hidden');if(!new URLSearchParams(location.search).has('edit'))location.replace('/')}
+ else if(!new URLSearchParams(location.search).has('edit')){$('progress').classList.remove('hidden');$('heading').textContent='Ready to refresh';$('step').textContent='Starting…'}
+ clearTimeout(timer);timer=setTimeout(tick,st.refreshing?1200:4000)}
+$('accept').onchange=()=>$('agreeBtn').disabled=!$('accept').checked;
+$('agreeBtn').onclick=async()=>{await post('/api/agree');tick()};
+$('saveProvider').onclick=async()=>{if(await saveProvider()){$('providerError').textContent='Settings saved.'}};$('refresh').onclick=async()=>{if(await saveProvider()){await post('/api/run');tick()}};$('retry').onclick=async()=>{await post('/api/run');tick()};tick();
+</script></body></html>
