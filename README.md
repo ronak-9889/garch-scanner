@@ -67,14 +67,23 @@ The source build scripts are included in `app_source`. Check that directory's RE
 
 Watch the GARCH Scanner demonstration:
 
-[▶ Watch the demo video on YouTube](https://www.youtube.com/watch?v=uaikF12vdrA)
+## 🎬 GARCH Scanner Demo
+
+[![Watch the GARCH Scanner Demo](https://img.youtube.com/vi/uaikF12vdrA/maxresdefault.jpg)](https://www.youtube.com/watch?v=uaikF12vdrA)
+
+*Click the preview image above to watch the demo on YouTube.*
+
+
 
 ### Screenshots
 
-![GARCH Scanner dashboard](Screenshots/Screenshot 2026-10-22 101746.png)
-![Stock Scanner Results](Screenshots/Screenshot 2026-10-22 101827.png)
-![Global Market Monitor](Screenshots/Screenshot 2026-10-22 101923.png)
-![Forecast Details](Screenshots/Screenshot 2026-10-22 101941.png)
+![GARCH Scanner Dashboard](Screenshots/Screenshot%202026-10-22%20101746.png)
+
+![Stock Scanner Results](Screenshots/Screenshot%202026-10-22%20101827.png)
+
+![Global Market Monitor](Screenshots/Screenshot%202026-10-22%20101923.png)
+
+![Forecast Details](Screenshots/Screenshot%202026-10-22%20101941.png)
 
 ## Interpretation and limitations
 
