@@ -72,9 +72,9 @@ Watch the GARCH Scanner demonstration:
 ### Screenshots
 
 ![GARCH Scanner dashboard](Screenshots/Screenshot 2026-10-22 101746.png)
-(Screenshots/Screenshot 2026-10-22 101827.png)
-(Screenshots/Screenshot 2026-10-22 101923.png)
-(Screenshots/Screenshot 2026-10-22 101941.png)
+![Stock Scanner Results](Screenshots/Screenshot 2026-10-22 101827.png)
+![Global Market Monitor](Screenshots/Screenshot 2026-10-22 101923.png)
+![Forecast Details](Screenshots/Screenshot 2026-10-22 101941.png)
 
 ## Interpretation and limitations
 
