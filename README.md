@@ -63,6 +63,16 @@ Requirements: Go 1.22 or later.
 
 The source build scripts are included in `app_source`. Check that directory's README for any additional platform-specific details.
 
+## Demo
+
+Watch the GARCH Scanner demonstration:
+
+[▶ Watch the demo video on YouTube](https://www.youtube.com/watch?v=uaikF12vdrA)
+
+### Screenshots
+
+![GARCH Scanner dashboard](screenshots/main-dashboard.png)
+
 ## Interpretation and limitations
 
 GARCH Scanner estimates conditional volatility and statistical ranges from historical observations. It does **not** predict market direction, guarantee future prices, or provide investment advice. Real outcomes can fall outside the estimated ranges, particularly during market gaps or unusual events. Forecast quality depends on input-data quality, history length, model assumptions, and market conditions.
