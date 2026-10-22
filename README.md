@@ -71,7 +71,10 @@ Watch the GARCH Scanner demonstration:
 
 ### Screenshots
 
-![GARCH Scanner dashboard](screenshots/main-dashboard.png)
+![GARCH Scanner dashboard](Screenshots/Screenshot 2026-10-22 101746.png)
+(Screenshots/Screenshot 2026-10-22 101827.png)
+(Screenshots/Screenshot 2026-10-22 101923.png)
+(Screenshots/Screenshot 2026-10-22 101941.png)
 
 ## Interpretation and limitations
 
